@@ -10,8 +10,13 @@ requires-python = ">=3.9"
 dependencies = [
     "matplotlib>=3.9.4",
     "numpy>=2.0.2",
+    "opencv-contrib-python>=5.1.0.95",
+    "pandas>=2.3.3",
     "pascal-voc-writer>=0.1.4",
+    "pillow>=11.3.0",
+    "scikit-learn>=1.6.1",
     "torch>=2.8.0",
+    "torchvision>=0.23.0",
 ]
 
 [project.scripts]
@@ -20,3 +25,17 @@ dependencies = [
 [build-system]
 requires = ["uv_build>=0.12.21,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.uv]
+# fonttools 4.69.0 ships only cp311 wheels; keep the previous release
+constraint-dependencies = ["fonttools<4.69"]
+
+# CUDA 12.6 build: the default cu132 wheels dropped V100 (sm_70) kernels
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu126" }
+torchvision = { index = "pytorch-cu126" }
